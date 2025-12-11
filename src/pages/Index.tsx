@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
+  const navigate = useNavigate();
   const [playingId, setPlayingId] = useState<string | null>(null);
 
   const artists = [
@@ -209,6 +211,7 @@ const Index = () => {
                 key={artist.id}
                 className="bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 overflow-hidden group cursor-pointer animate-scale-in"
                 style={{ animationDelay: `${index * 100}ms` }}
+                onClick={() => navigate(`/artist/${artist.id}`)}
               >
                 <div className="relative h-48 overflow-hidden">
                   <div className={`absolute inset-0 bg-gradient-to-br ${artist.color} opacity-40`}></div>
