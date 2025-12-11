@@ -8,6 +8,20 @@ import Icon from '@/components/ui/icon';
 const Index = () => {
   const navigate = useNavigate();
   const [playingId, setPlayingId] = useState<string | null>(null);
+  const [verifiedArtists, setVerifiedArtists] = useState<Set<string>>(new Set(['1', '2', '4']));
+
+  const toggleVerification = (artistId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setVerifiedArtists(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(artistId)) {
+        newSet.delete(artistId);
+      } else {
+        newSet.add(artistId);
+      }
+      return newSet;
+    });
+  };
 
   const artists = [
     {
@@ -220,6 +234,18 @@ const Index = () => {
                     alt={artist.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
+                  <div className="absolute top-3 left-3">
+                    <button
+                      onClick={(e) => toggleVerification(artist.id, e)}
+                      className="w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-black/80 transition-all hover:scale-110"
+                    >
+                      {verifiedArtists.has(artist.id) ? (
+                        <Icon name="Check" size={16} className="text-[#0EA5E9]" />
+                      ) : (
+                        <Icon name="Plus" size={16} className="text-white/60" />
+                      )}
+                    </button>
+                  </div>
                   <div className="absolute top-3 right-3">
                     <Badge className="bg-[#0EA5E9] text-white border-0">
                       {artist.matchScore}% совпадение
@@ -227,7 +253,14 @@ const Index = () => {
                   </div>
                 </div>
                 <div className="p-4">
-                  <h3 className="font-bold text-xl mb-2">{artist.name}</h3>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="font-bold text-xl">{artist.name}</h3>
+                    {verifiedArtists.has(artist.id) && (
+                      <div className="w-5 h-5 rounded-full bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] flex items-center justify-center animate-scale-in">
+                        <Icon name="Check" size={12} className="text-white" />
+                      </div>
+                    )}
+                  </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-white/60">{artist.genre}</span>
                     <div className="flex items-center gap-1 text-white/60">
